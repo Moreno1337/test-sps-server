@@ -18,8 +18,8 @@ Documentação Swagger em /docs.
 
 Testes de API (e2e) com Jest + supertest cobrindo fluxos principais.
 
-## 🏗️ Arquitetura & Organização (Clean Architecture)
-
+## 🏗️ Arquitetura & Organização
+```
 docs/                 # spec OpenAPI/YAML
 src/
 ├───api/              # camada de entrega HTTP (Express)         
@@ -39,8 +39,8 @@ src/
 tests/                # testes (Jest + supertest)
 ├───e2e               # testes de ponta à ponta
 └───helpers           # helper para instanciar o app
-
-Fluxo de dependências: Routes → Controllers → Use Cases → Infra.
+```
+Fluxo de dependências: **Routes → Controllers → Use Cases → Infra**
 
 ## 🧰 Stack & Decisões Técnicas
 
