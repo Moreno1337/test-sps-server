@@ -1,8 +1,8 @@
-SPS Test API - Desafio Técnico (Node.js + Express)
+# SPS Test API - Desafio Técnico (Node.js + Express)
 
 API RESTful para autenticação com JWT e CRUD de usuários usando armazenamento em memória. Projeto estruturado usando padrões Clean Architecture. Inclui rotas protegidas, validações, Swagger e testes e2e.
 
-✨ Principais requisitos atendidos
+## ✨ Principais requisitos atendidos
 
 Login seguro (POST /auth/login) com JWT (expiração configurável).
 
@@ -18,34 +18,47 @@ Documentação Swagger em /docs.
 
 Testes de API (e2e) com Jest + supertest cobrindo fluxos principais.
 
-🏗️ Arquitetura & Organização (Clean Architecture)
+## 🏗️ Arquitetura & Organização (Clean Architecture)
 src/
+
   api/                # camada de entrega HTTP (Express)
+  
     controllers/      # controladores finos (sem regra de negócio)
     middlewares/      # auth JWT, validação, etc.
     routes/           # definição das rotas
+    
   application/        # casos de uso (regras de aplicação)
+  
     use-cases/
     dtos/             # schemas para validação via middleware (zod)
+    
   domain/             # erros de domínio
     errors/
+    
   infrastructure/     # implementações de portas (repo, jwt, hash, config)
+  
     persistence/      # repositório in-memory + seed
     security/         # jwt-token.service, bcrypt-hash.service
     config/           # carregamento e validação de env
+    
   main/               # DI, app e inicialização
+  
     container.js
     app.js
     index.js
+    
 docs/
+
   openapi.yaml        # spec OpenAPI/YAML
+  
 tests/                # testes (Jest + supertest)
+
   e2e/                # testes de ponta à ponta
   helpers/            # helper para instanciar o app
 
 Fluxo de dependências: Routes → Controllers → Use Cases → Infra.
 
-🧰 Stack & Decisões Técnicas
+## 🧰 Stack & Decisões Técnicas
 
 JWT: jsonwebtoken.
 
@@ -57,47 +70,56 @@ Docs: swagger-ui-express + openapi.yaml.
 
 Testes: jest + supertest.
 
-✅ Pré-requisitos
+## ✅ Pré-requisitos
 
-Node.js LTS
-npm
+- **Node.js LTS**
 
-🚀 Como rodar (dev)
-# 1) Clonar e entrar
-git clone <url-do-seu-fork>
+- **npm**
+
+### 🚀 Como rodar (dev)
+### 1) Clonar e entrar
+git clone ```https://github.com/Moreno1337/test-sps-server.git```
+
 cd test-sps-server
 
-# 2) Instalar dependências
+### 2) Instalar dependências
 npm install
 
-# 4) Rodar em desenvolvimento
+### 4) Rodar em desenvolvimento
 npm run dev
-# API: http://localhost:3000 # porta padrão, pode ser alterada
-# Debugger Node: porta 7000 (se o script usa --inspect=7000)
 
-# 5) Healthcheck
-curl http://localhost:3000/health
+API: ```http://localhost:3000``` (porta padrão)
 
-🧪 Testes
-npm test
+### 5) Healthcheck
+```curl http://localhost:3000/health```
 
-Testes e2e cobrem: login OK/401, create 201/400, list 200, update 200 (inclui troca de senha e re-login), delete 204/400 e auth 401.
+## 🧪 Testes
 
-📝 Documentação da API (Swagger)
+```npm test```
+
+Testes e2e cobrem:
+  - login OK/401
+  - create 201/400
+  - list 200
+  - update 200 (inclui troca de senha e re-login)
+  - delete 204/400
+  - auth 401
+
+## 📝 Documentação da API (Swagger)
 
 UI: http://localhost:3000/docs
 
-🔐 Segurança (resumo)
+## 🔐 Segurança (resumo)
 
 JWT com expiração (JWT_TTL) e verificação no middleware.
 
 Senha sempre com hash (bcryptjs) — nunca armazenada em claro.
 
-✅ Validação & Erros
+## ✅ Validação & Erros
 
 Validação de entrada com Zod via middleware validate(schema).
 
-🤝 Notas finais
+## 🤝 Notas finais
 
 O projeto prioriza separação de camadas, simplicidade e claridade para ser facilmente evoluído.
 
