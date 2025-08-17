@@ -1,0 +1,122 @@
+openapi: 3.0.0
+info:
+  title: SPS Test API
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000
+    description: Local
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    PublicUser:
+      type: object
+      required: [id, name, email, type]
+      properties:
+        id: { type: string }
+        name: { type: string }
+        email: { type: string, format: email }
+        type: { type: string, enum: [admin, user] }
+    CreateUserInput:
+      type: object
+      required: [name, email, type, password]
+      properties:
+        name: { type: string }
+        email: { type: string, format: email }
+        type: { type: string, enum: [admin, user] }
+        password: { type: string, minLength: 5 }
+    UpdateUserInput:
+      type: object
+      properties:
+        name: { type: string }
+        email: { type: string, format: email }
+        type: { type: string, enum: [admin, user] }
+        password: { type: string, minLength: 5 }
+
+security:
+  - bearerAuth: []
+
+paths:
+  /auth/login:
+    post:
+      summary: Login with email and password
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email: { type: string, format: email, example: admin@sps.com }
+                password: { type: string, example: admin123 }
+      responses:
+        '200':
+          description: Authenticated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token: { type: string }
+                  user: { $ref: '#/components/schemas/PublicUser' }
+        '401': { description: Invalid credentials }
+        '400': { description: Invalid input }
+
+  /users:
+    get:
+      summary: List users
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/PublicUser' }
+    post:
+      summary: Create user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreateUserInput' }
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PublicUser' }
+        '400': { description: Email already in use / Invalid input }
+
+  /users/{id}:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema: { type: string }
+    put:
+      summary: Update user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UpdateUserInput' }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PublicUser' }
+        '400': { description: Invalid input }
+    delete:
+      summary: Delete user
+      responses:
+        '204': { description: No Content }
+        '400': { description: Not found / invalid id }

@@ -1,1 +1,38 @@
-/node_modules
+node_modules/
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json.#*        # artefatos temporários do npm
+.npmrc                      # se for sensível
+
+dist/
+build/
+out/
+*.tsbuildinfo               # cache do TS incremental
+
+coverage/
+.nyc_output/
+.jest/
+jest-stare/
+test-results.xml
+junit.xml
+
+logs/
+*.log
+*.pid
+*.seed
+*.pid.lock
+
+.tmp/
+temp/
+tmp/
+*.tgz                       
+
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+.vscode/
+!.vscode/launch.json       
+!.vscode/extensions.json    

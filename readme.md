@@ -1,52 +1,106 @@
-----------------------------------
-ESPANHOL
-----------------------------------
+SPS Test API - Desafio Técnico (Node.js + Express)
 
-## Prueba NODE
+API RESTful para autenticação com JWT e CRUD de usuários usando armazenamento em memória. Projeto estruturado usando padrões Clean Architecture. Inclui rotas protegidas, validações, Swagger e testes e2e.
 
-- Crear un CRUD (API REST) en Node para el registro de usuarios.
-- Para la creación de la prueba, utilizar un repositorio falso de usuarios (puede ser en memoria).
+✨ Principais requisitos atendidos
 
-## Reglas
+Login seguro (POST /auth/login) com JWT (expiração configurável).
 
-- Debe existir un usuario administrador previamente registrado para utilizar la autenticación (no es necesario cifrar la contraseña):
-{
-  "name": "admin",
-  "email": "admin@spsgroup.com.br",
-  "type": "admin",
-  "password": "1234"
-}
+CRUD completo de usuários (/users).
 
-- Crear una ruta de autenticación (token Jwt).
-- Las rutas de la API solo pueden ser ejecutadas si el usuario está autenticado.
-- Debe ser posible añadir usuarios con los campos: email, nombre, type, password.
-- No debe ser posible registrar un correo electrónico ya existente.
-- Debe ser posible eliminar usuarios.
-- Debe ser posible modificar los datos de un usuario.
+Acesso restrito: todas as rotas (exceto login) exigem Bearer <token>.
 
+Usuário admin seed: admin@sps.com / admin123 (hash com bcryptjs).
 
-----------------------------------
-PORTUGUÊS
-----------------------------------
+Armazenamento em memória (sem banco).
 
-# Teste NODE
+Documentação Swagger em /docs.
 
-- Criar um CRUD (API REST) em node para cadastro de usuários
-- Para a criação do teste utilizar um repositório fake dos usuários. (Pode ser em memória)
+Testes de API (e2e) com Jest + supertest cobrindo fluxos principais.
 
-## Regras
+🏗️ Arquitetura & Organização (Clean Architecture)
+src/
+  api/                # camada de entrega HTTP (Express)
+    controllers/      # controladores finos (sem regra de negócio)
+    middlewares/      # auth JWT, validação, etc.
+    routes/           # definição das rotas
+  application/        # casos de uso (regras de aplicação)
+    use-cases/
+    dtos/             # schemas para validação via middleware (zod)
+  domain/             # erros de domínio
+    errors/
+  infrastructure/     # implementações de portas (repo, jwt, hash, config)
+    persistence/      # repositório in-memory + seed
+    security/         # jwt-token.service, bcrypt-hash.service
+    config/           # carregamento e validação de env
+  main/               # DI, app e inicialização
+    container.js
+    app.js
+    index.js
+docs/
+  openapi.yaml        # spec OpenAPI/YAML
+tests/                # testes (Jest + supertest)
+  e2e/                # testes de ponta à ponta
+  helpers/            # helper para instanciar o app
 
-- Deve existir um usuário admin previamente cadastrado para utilizar autenticação (não precisa criptografar a senha);
-  {
-    name: "admin",
-    email: "admin@spsgroup.com.br",
-    type: "admin"
-    password: "1234"
-  }
+Fluxo de dependências: Routes → Controllers → Use Cases → Infra.
 
-- Criar rota de autenticação (Jwt token)
-- As rotas da API só podem ser executadas se estiver autenticada
-- Deve ser possível adicionar usuários. Campos: email, nome, type, password
-- Não deve ser possível cadastrar o e-mail já cadastrado
-- Deve ser possível remover usuário
-- Deve ser possível alterar os dados do usuário
+🧰 Stack & Decisões Técnicas
+
+JWT: jsonwebtoken.
+
+Hash: bcryptjs.
+
+Validação: zod.
+
+Docs: swagger-ui-express + openapi.yaml.
+
+Testes: jest + supertest.
+
+✅ Pré-requisitos
+
+Node.js LTS
+npm
+
+🚀 Como rodar (dev)
+# 1) Clonar e entrar
+git clone <url-do-seu-fork>
+cd test-sps-server
+
+# 2) Instalar dependências
+npm install
+
+# 4) Rodar em desenvolvimento
+npm run dev
+# API: http://localhost:3000 # porta padrão, pode ser alterada
+# Debugger Node: porta 7000 (se o script usa --inspect=7000)
+
+# 5) Healthcheck
+curl http://localhost:3000/health
+
+🧪 Testes
+npm test
+
+Testes e2e cobrem: login OK/401, create 201/400, list 200, update 200 (inclui troca de senha e re-login), delete 204/400 e auth 401.
+
+📝 Documentação da API (Swagger)
+
+UI: http://localhost:3000/docs
+
+🔐 Segurança (resumo)
+
+JWT com expiração (JWT_TTL) e verificação no middleware.
+
+Senha sempre com hash (bcryptjs) — nunca armazenada em claro.
+
+✅ Validação & Erros
+
+Validação de entrada com Zod via middleware validate(schema).
+
+🤝 Notas finais
+
+O projeto prioriza separação de camadas, simplicidade e claridade para ser facilmente evoluído.
+
+O README serve como guia rápido para avaliação e execução local.
+
+Qualquer dúvida, abra uma issue ou entre em contato.
