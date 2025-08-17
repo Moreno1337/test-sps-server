@@ -19,42 +19,26 @@ Documentação Swagger em /docs.
 Testes de API (e2e) com Jest + supertest cobrindo fluxos principais.
 
 ## 🏗️ Arquitetura & Organização (Clean Architecture)
+
+docs/                 # spec OpenAPI/YAML
 src/
-
-  api/                # camada de entrega HTTP (Express)
-  
-    controllers/      # controladores finos (sem regra de negócio)
-    middlewares/      # auth JWT, validação, etc.
-    routes/           # definição das rotas
-    
-  application/        # casos de uso (regras de aplicação)
-  
-    use-cases/
-    dtos/             # schemas para validação via middleware (zod)
-    
-  domain/             # erros de domínio
-    errors/
-    
-  infrastructure/     # implementações de portas (repo, jwt, hash, config)
-  
-    persistence/      # repositório in-memory + seed
-    security/         # jwt-token.service, bcrypt-hash.service
-    config/           # carregamento e validação de env
-    
-  main/               # DI, app e inicialização
-  
-    container.js
-    app.js
-    index.js
-    
-docs/
-
-  openapi.yaml        # spec OpenAPI/YAML
-  
+├───api/              # camada de entrega HTTP (Express)         
+│   ├───controllers/  # controladores finos (sem regra de negócio)
+│   ├───middlewares/  # auth JWT, validação, etc.
+│   └───routes/       # definição das rotas
+├───application/      # casos de uso (regras de aplicação)
+│   ├───dtos/
+│   └───use-cases/    # schemas para validação via middleware (zod)
+├───domain/           # erros de domínio
+│   └───errors/
+├───infrastructure/   # implementações de portas (repo, jwt, hash, config)
+│   ├───config/       # carregamento e validação de env
+│   ├───persistence/  # repositório in-memory + seed
+│   └───security/     # jwt-token.service, bcrypt-hash.service
+└───main/             # DI, app e inicialização
 tests/                # testes (Jest + supertest)
-
-  e2e/                # testes de ponta à ponta
-  helpers/            # helper para instanciar o app
+├───e2e               # testes de ponta à ponta
+└───helpers           # helper para instanciar o app
 
 Fluxo de dependências: Routes → Controllers → Use Cases → Infra.
 
